@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Entrega especial 🚗💐</title>
+
+    <style>
+
+        /* =====================================================
+           GENERAL
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #31364a,
+                    #171923 55%,
+                    #0d0e14
+                );
+
+            color: white;
+
+            overflow-x: hidden;
+        }
+
+
+        .pantalla {
+            display: none;
+
+            width: 100%;
+            min-height: 100vh;
+
+            padding: 35px 20px;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+        }
+
+
+        .pantalla.activa {
+            display: flex;
+        }
+
+
+        .tarjeta {
+            width: min(600px, 92%);
+
+            padding: 40px 35px;
+
+            background:
+                rgba(255,255,255,.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,.16);
+
+            border-radius: 25px;
+
+            backdrop-filter:
+                blur(15px);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.35);
+        }
+
+
+        h1 {
+            margin-top: 0;
+
+            font-size:
+                clamp(
+                    2.3rem,
+                    6vw,
+                    3.5rem
+                );
+        }
+
+
+        h2 {
+            font-size: 2rem;
+        }
+
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+
+            color: #e8e8ec;
+        }
+
+
+        button {
+            border: none;
+
+            border-radius: 999px;
+
+            padding:
+                14px 25px;
+
+            font-size: 1rem;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            background: white;
+            color: #15161d;
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+
+        button:hover {
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,.3);
+        }
+
+
+        .pequeno {
+            opacity: .65;
+
+            font-size: .85rem;
+        }
+
+
+        /* =====================================================
+           ANIMACIONES GENERALES
+        ===================================================== */
+
+        .entrada {
+            animation:
+                entrada .7s ease;
+        }
+
+
+        @keyframes entrada {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* =====================================================
+           PANTALLA INICIAL
+        ===================================================== */
+
+        .ruta {
+            margin:
+                25px 0;
+
+            font-size: 1.4rem;
+        }
+
+
+        /* =====================================================
+           PANTALLA DEL RAMO
+        ===================================================== */
+
+        #pantallaRamo {
+            background:
+                radial-gradient(
+                    circle at top,
+                    #4a324d,
+                    #201a2b 60%,
+                    #111018
+                );
+
+            align-items:
+                flex-start;
+
+            padding-top: 40px;
+        }
+
+
+        .contenido-ramo {
+            width: 100%;
+        }
+
+
+        .titulo-ramo {
+            margin-bottom: 5px;
+        }
+
+
+        .instruccion {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+
+        /* =====================================================
+           IMAGEN DEL RAMO
+        ===================================================== */
+
+        .ramo-imagen {
+            position: relative;
+
+            width:
+                min(
+                    620px,
+                    92vw
+                );
+
+            margin:
+                10px auto 20px;
+        }
+
+
+        .imagen-ramo {
+            display: block;
+
+            width: 100%;
+            height: auto;
+
+            border-radius: 25px;
+
+            filter:
+                drop-shadow(
+                    0 20px 35px
+                    rgba(0,0,0,.30)
+                );
+
+            user-select: none;
+
+            pointer-events: none;
+        }
+
+
+        /* =====================================================
+           ZONAS CLICABLES DE LOS AUTOS
+        ===================================================== */
+
+        .zona-auto {
+            position: absolute;
+
+            padding: 0;
+
+            border: none;
+
+            background:
+                transparent;
+
+            cursor: pointer;
+
+            border-radius: 35px;
+
+            box-shadow: none;
+
+            transition:
+                background .2s ease,
+                box-shadow .2s ease,
+                transform .2s ease;
+        }
+
+
+        .zona-auto:hover {
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .10
+                );
+
+            box-shadow:
+                0 0 30px
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .45
+                );
+
+            transform:
+                scale(1.05);
+        }
+
+
+        /*
+           Las posiciones están expresadas
+           en porcentajes para adaptarse
+           al tamaño de la imagen.
+        */
+
+
+        /* Amarillo */
+
+        .zona1 {
+            left: 39%;
+            top: 17%;
+
+            width: 22%;
+            height: 14%;
+        }
+
+
+        /* Rojo */
+
+        .zona2 {
+            left: 20%;
+            top: 28%;
+
+            width: 23%;
+            height: 14%;
+        }
+
+
+        /* Azul */
+
+        .zona3 {
+            left: 62%;
+            top: 29%;
+
+            width: 22%;
+            height: 14%;
+        }
+
+
+        /* Morado */
+
+        .zona4 {
+            left: 34%;
+            top: 43%;
+
+            width: 21%;
+            height: 14%;
+        }
+
+
+        /* Verde */
+
+        .zona5 {
+            left: 57%;
+            top: 43%;
+
+            width: 22%;
+            height: 14%;
+        }
+
+
+        /* =====================================================
+           AUTO YA DESCUBIERTO
+        ===================================================== */
+
+        .zona-auto.abierto::after {
+            content: "✓";
+
+            position: absolute;
+
+            right: 5px;
+            top: 5px;
+
+            width: 30px;
+            height: 30px;
+
+            display: flex;
+
+            justify-content:
+                center;
+
+            align-items:
+                center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .95
+                );
+
+            color: #49304d;
+
+            font-size: 18px;
+            font-weight: 900;
+
+            box-shadow:
+                0 5px 12px
+                rgba(0,0,0,.25);
+        }
+
+
+        /* =====================================================
+           CONTADOR
+        ===================================================== */
+
+        #contador {
+            margin-top: 10px;
+
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+
+        #continuar {
+            display: none;
+
+            margin:
+                15px auto 30px;
+        }
+
+
+        /* =====================================================
+           VENTANA DE NOTITAS
+        ===================================================== */
+
+        .nota {
+            position: fixed;
+
+            inset: 0;
+
+            display: none;
+
+            justify-content:
+                center;
+
+            align-items:
+                center;
+
+            padding: 25px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .78
+                );
+
+            z-index: 50;
+        }
+
+
+        .nota.visible {
+            display: flex;
+        }
+
+
+        .nota-contenido {
+            width:
+                min(
+                    500px,
+                    95%
+                );
+
+            padding:
+                35px;
+
+            background:
+                #f6f0e9;
+
+            color: #222;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 25px 80px
+                rgba(0,0,0,.5);
+
+            animation:
+                aparecerNota
+                .35s ease;
+        }
+
+
+        .nota-contenido h2 {
+            margin-top: 0;
+        }
+
+
+        .nota-contenido p {
+            color: #333;
+        }
+
+
+        @keyframes aparecerNota {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    scale(.85)
+                    translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    scale(1)
+                    translateY(0);
+            }
+
+        }
+
+
+        /* =====================================================
+           PANTALLA DEL BOSQUE
+        ===================================================== */
+
+        #pantallaSorpresa {
+            background:
+                radial-gradient(
+                    circle at center,
+                    #142018,
+                    #080b09 65%
+                );
+        }
+
+
+        .bosque {
+            margin-bottom: 20px;
+
+            font-size: 4rem;
+
+            letter-spacing: 10px;
+        }
+
+
+        .steam {
+            margin-top: 30px;
+
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+
+        .corazon {
+            font-size: 1.5rem;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .pantalla {
+                padding:
+                    25px 15px;
+            }
+
+
+            .tarjeta {
+                padding:
+                    35px 25px;
+            }
+
+
+            .bosque {
+                font-size: 3rem;
+
+                letter-spacing:
+                    5px;
+            }
+
+
+            .zona-auto.abierto::after {
+                width: 25px;
+                height: 25px;
+
+                font-size: 15px;
+            }
+
+        }
+        
+        /* ==========================================
+            TRANSICIÓN AL SEGUNDO REGALO
+        ========================================== */
+        .transicion-negra {
+            position: fixed;
+            inset: 0;
+            
+            background: #050706;
+            
+            opacity: 0;
+            pointer-events: none;
+            
+            z-index: 999;
+            
+            transition: opacity .8s ease;
+        }
+        
+        .transicion-negra.visible {
+            opacity: 1;
+        }
+        
+        /* Entrada especial del bosque */
+        
+        #pantallaSorpresa.activa .tarjeta {
+            animation: aparecerBosque 1.2s ease both;
+        }
+        
+        @keyframes aparecerBosque {
+            
+            from {
+                opacity: 0;
+                transform:
+                    translateY(15px)
+                    scale(.98);
+            }
+            
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         PANTALLA 1
+         ENTREGA
+    ====================================================== -->
+
+    <section
+        id="pantallaInicio"
+        class="pantalla activa"
+    >
+
+        <div class="tarjeta entrada">
+
+            <div
+                style="
+                    font-size: 4rem;
+                "
+            >
+                📦
+            </div>
+
+            <h1>
+                Entrega especial
+            </h1>
+
+
+            <div class="ruta">
+
+                🇲🇽 México
+
+                &nbsp; ✈️ &nbsp;
+
+                Perú 🇵🇪
+
+            </div>
+
+
+            <p>
+
+                Al parecer hoy se regalan
+                ramos de Hot Wheels...
+
+                y cierta persona se acordó
+
+                <strong>
+                    un poquito tarde.
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Como Lima está
+                ligeramente lejos para ir
+                a dejártelo personalmente,
+
+                tuve que improvisar.
+
+            </p>
+
+
+            <button id="btnRecibir">
+
+                Recibir mi regalo 🚗
+
+            </button>
+
+
+            <p class="pequeno">
+
+                No se aceptan devoluciones.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 2
+         RAMO
+    ====================================================== -->
+
+    <section
+        id="pantallaRamo"
+        class="pantalla"
+    >
+
+        <div class="contenido-ramo">
+
+
+            <h1 class="titulo-ramo">
+
+                Para mi pequeño 
+
+            </h1>
+
+             <p class="instruccion">
+
+                Hay cinco pequeños
+                mensajes escondidos.
+
+                <br>
+                Toca cada Hot Wheels.
+
+
+             </p>
+
+
+            <!-- ===========================
+                 RAMO
+            ============================ -->
+
+            <div class="ramo-imagen">
+
+
+                <img
+                    src="ramo_hotwheels.png"
+                    alt="
+                        Ramo con cinco
+                        Hot Wheels
+                    "
+                    class="imagen-ramo"
+                >
+
+
+                <!-- AMARILLO -->
+
+                <button
+                    class="
+                        zona-auto
+                        zona1
+                        auto
+                    "
+                    data-nota="0"
+                    aria-label="
+                        Abrir mensaje
+                        del auto amarillo
+                    "
+                ></button>
+
+
+                <!-- ROJO -->
+
+                <button
+                    class="
+                        zona-auto
+                        zona2
+                        auto
+                    "
+                    data-nota="1"
+                    aria-label="
+                        Abrir mensaje
+                        del auto rojo
+                    "
+                ></button>
+
+
+                <!-- AZUL -->
+
+                <button
+                    class="
+                        zona-auto
+                        zona3
+                        auto
+                    "
+                    data-nota="2"
+                    aria-label="
+                        Abrir mensaje
+                        del auto azul
+                    "
+                ></button>
+
+
+                <!-- MORADO -->
+
+                <button
+                    class="
+                        zona-auto
+                        zona4
+                        auto
+                    "
+                    data-nota="3"
+                    aria-label="
+                        Abrir mensaje
+                        del auto morado
+                    "
+                ></button>
+
+
+                <!-- VERDE -->
+
+                <button
+                    class="
+                        zona-auto
+                        zona5
+                        auto
+                    "
+                    data-nota="4"
+                    aria-label="
+                        Abrir mensaje
+                        del auto verde
+                    "
+                ></button>
+
+
+            </div>
+
+
+            <!-- CONTADOR REAL -->
+
+            <p id="contador">
+
+                Mensajes encontrados:
+                0 / 5
+
+            </p>
+
+
+            <button id="continuar">
+
+                Terminar entrega ✓
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 3
+         ENTREGA COMPLETADA
+    ====================================================== -->
+
+    <section
+        id="pantallaEngano"
+        class="pantalla"
+    >
+
+        <div class="tarjeta entrada">
+
+            <h1>
+
+                💐 Entrega completada
+
+            </h1>
+
+
+            <p>
+
+                Misión cumplida.
+
+            </p>
+
+
+            <p>
+
+                Oficialmente puedes decir
+                que recibiste un ramo
+                de Hot Wheels
+                desde otro país.
+
+            </p>
+
+
+            <button id="btnTerminar">
+
+                Terminar
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 4
+         ENGAÑO
+    ====================================================== -->
+
+    <section
+        id="pantallaPlot"
+        class="pantalla"
+    >
+
+        <div class="tarjeta entrada">
+
+            <h1>
+                ...
+            </h1>
+
+
+            <p>
+
+                ¿En serio creíste
+                que ese era
+                todo tu regalo?
+
+            </p>
+
+
+            <p>
+
+                Qué fácil eres
+                de engañar.
+
+            </p>
+
+
+            <button id="btnSorpresa">
+
+                ¿Hay más? 👀
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 5
+         BOSQUE / STEAM
+    ====================================================== -->
+
+    <section
+        id="pantallaSorpresa"
+        class="pantalla"
+    >
+
+        <div class="tarjeta entrada">
+
+
+            <div class="bosque">
+
+                🌲 🌲 🌲
+
+            </div>
+
+
+            <h1>
+
+                Segunda entrega
+
+            </h1>
+
+
+            <p>
+
+                Ya sobreviviste
+                una vez al bosque...
+
+            </p>
+
+
+            <p>
+
+                Parece que tendrás
+                que hacerlo otra vez.
+
+            </p>
+
+
+            <div class="steam">
+
+                Revisa Steam,
+                Gatito. 👀
+
+            </div>
+
+
+            <p>
+
+                Y procura no morir.
+
+                <br>
+
+                No pienso ir hasta Perú
+                a revivirte.
+
+            </p>
+
+
+            <p class="pequeno">
+
+                ...aunque por ti
+                quizá lo consideraría.
+
+                <span class="corazon">
+                    ♡
+                </span>
+
+            </p>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MODAL DE NOTITAS
+    ====================================================== -->
+
+    <div
+        id="nota"
+        class="nota"
+    >
+
+        <div class="nota-contenido">
+
+            <h2 id="tituloNota"></h2>
+
+            <p id="textoNota"></p>
+
+
+            <button id="cerrarNota">
+
+                Guardar notita ♡
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           MENSAJES
+        ====================================================== */
+
+        const notas = [
+
+            {
+
+                titulo:
+                    "Hot Wheels #1 🚗",
+
+                texto:
+                    "Por todas esas veces en las que logras hacerme reír, incluso cuando no era parte del plan."
+
+            },
+
+
+            {
+
+                titulo:
+                    "Hot Wheels #2 🚙",
+
+                texto:
+                    "Por sobrevivir conmigo en Overcooked. Aunque todavía nos falta el segundo, mi chef <3"
+
+            },
+
+
+            {
+
+                titulo:
+                    "Hot Wheels #3 🏎️",
+
+                texto:
+                    "Por ser de esas personas con las que puedo pasar horas hablando y ser él único que sabe chiviarme"
+
+            },
+
+
+            {
+
+                titulo:
+                    "Hot Wheels #4 🚘",
+
+                texto:
+                    "Dicen que los Hot Wheels se le regalan a alguien especial... Porque eres especial e importante para mí. 👀"
+
+            },
+
+
+            {
+
+                titulo:
+                    "Hot Wheels #5 🏁",
+
+                texto:
+                    "Este vale por el abrazo que te daría si Perú no estuviera tan absurdamente lejos... y quizá hasta por un beso francés.  👀"
+
+            }
+
+        ];
+
+
+        /* =====================================================
+           ELEMENTOS
+        ====================================================== */
+
+        const pantallas =
+            document.querySelectorAll(
+                ".pantalla"
+            );
+
+
+        const nota =
+            document.getElementById(
+                "nota"
+            );
+
+
+        const tituloNota =
+            document.getElementById(
+                "tituloNota"
+            );
+
+
+        const textoNota =
+            document.getElementById(
+                "textoNota"
+            );
+
+
+        const contador =
+            document.getElementById(
+                "contador"
+            );
+
+
+        const continuar =
+            document.getElementById(
+                "continuar"
+            );
+
+
+        let notasAbiertas =
+            new Set();
+
+
+        /* =====================================================
+           CAMBIAR PANTALLA
+        ====================================================== */
+
+        function mostrarPantalla(id) {
+
+            pantallas.forEach(
+                pantalla => {
+
+                    pantalla.classList.remove(
+                        "activa"
+                    );
+
+                }
+            );
+
+
+            document
+                .getElementById(id)
+                .classList.add(
+                    "activa"
+                );
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /* =====================================================
+           INICIO
+        ====================================================== */
+
+        document
+            .getElementById(
+                "btnRecibir"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    mostrarPantalla(
+                        "pantallaRamo"
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           HOT WHEELS
+        ====================================================== */
+
+        document
+            .querySelectorAll(
+                ".auto"
+            )
+            .forEach(
+                auto => {
+
+                    auto.addEventListener(
+                        "click",
+                        () => {
+
+                            const indice =
+                                Number(
+                                    auto.dataset.nota
+                                );
+
+
+                            tituloNota.textContent =
+                                notas[indice].titulo;
+
+
+                            textoNota.textContent =
+                                notas[indice].texto;
+
+
+                            nota.classList.add(
+                                "visible"
+                            );
+
+
+                            notasAbiertas.add(
+                                indice
+                            );
+
+
+                            auto.classList.add(
+                                "abierto"
+                            );
+
+
+                            actualizarContador();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           CERRAR NOTITA
+        ====================================================== */
+
+        document
+            .getElementById(
+                "cerrarNota"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    nota.classList.remove(
+                        "visible"
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           CONTADOR
+        ====================================================== */
+
+        function actualizarContador() {
+
+            contador.textContent =
+                "Mensajes encontrados: "
+                +
+                notasAbiertas.size
+                +
+                " / 5";
+
+
+            if (
+                notasAbiertas.size === 5
+            ) {
+
+                continuar.style.display =
+                    "inline-block";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           TERMINAR RAMO
+        ====================================================== */
+
+        continuar.addEventListener(
+            "click",
+            () => {
+
+                mostrarPantalla(
+                    "pantallaEngano"
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           FALSO FINAL
+        ====================================================== */
+
+        document
+            .getElementById(
+                "btnTerminar"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    mostrarPantalla(
+                        "pantallaPlot"
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           SEGUNDO REGALO
+        ====================================================== */
+
+        document
+            .getElementById("btnSorpresa")
+            .addEventListener("click", () => {
+                const transicion =
+
+                document.getElementById(
+                    "transicionNegra"
+                );
+
+                /* Oscurecer pantalla */
+                transicion.classList.add(
+                    "visible"
+                );
+
+                /* Esperamos a que quede negra */
+
+                setTimeout(() => {
+                    mostrarPantalla(
+                        "pantallaSorpresa"
+                    );
+
+                    /*
+                    Dejamos un pequeño instante
+                    completamente oscuro.
+                    */
+                   setTimeout(() => {
+                    transicion.classList.remove(
+                         "visible"
+                        );
+                    }, 350);
+                }, 800);
+            });
+
+
+    </script>
+
+    <div
+        id="transicionNegra"
+        class="transicion-negra">
+    </div>
+
+</body>
+
+</html>
